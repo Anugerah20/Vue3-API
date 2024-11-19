@@ -5,6 +5,6 @@
 /* Custom Input Search */
 @layer components {
   .input-search {
-    @apply lg:w-1/2 md:w-[60%] w-full border-2 border-slate-900 rounded-md size-10 p-4 mb-4;
+    @apply lg:w-1/2 md:w-[60%] w-full border-2 border-slate-900 rounded-md size-10 p-4 mb-4 focus:ring-2 focus:ring-slate-900 focus:outline-none appearance-none;
   }
 }
