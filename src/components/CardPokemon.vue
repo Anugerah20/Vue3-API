@@ -71,6 +71,7 @@ onMounted(() => {
           class="w-48 h-48 object-content mx-auto mb-2"
         />
         <h2 class="text-lg font-semibold">{{ pokemon.name }}</h2>
+        <router-link :to="`/pokemon/${pokemon.name}`"> Detail </router-link>
       </div>
     </div>
   </section>
