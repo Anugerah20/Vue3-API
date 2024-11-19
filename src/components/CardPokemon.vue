@@ -3,6 +3,7 @@ import { ref, onMounted } from "vue";
 
 interface Pokemon {
   name: string;
+  url: string;
   image: string;
 }
 
@@ -12,20 +13,25 @@ const pokemons = ref<Pokemon[]>([]);
 // Fungsi untuk fetch data Pokemon dengan URL gambar langsung
 const getPokemon = async (): Promise<void> => {
   try {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
     const data = await response.json();
 
-    // Map data untuk menyertakan gambar dengan ID dari URL
-    pokemons.value = data.results.map(
-      (pokemon: { name: string; url: string }) => {
-        // Ambil ID dari URL
-        const id = pokemon.url.split("/").slice(-2, -1)[0];
+    // Fetch detail pokemon untuk mendapatkan URL Gambar
+    const pokemonDetails = await Promise.all(
+      data.results.map(async (pokemon: { name: string; url: string }) => {
+        const responseDetail = await fetch(pokemon.url);
+        const detail = await responseDetail.json();
         return {
           name: pokemon.name,
-          image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
+          url: pokemon.url,
+          image: detail.sprites.front_default,
         };
-      }
+      })
     );
+
+    console.log(pokemonDetails);
+
+    pokemons.value = pokemonDetails;
   } catch (error) {
     console.error("Error fetching Pokemon data:", error);
   }
