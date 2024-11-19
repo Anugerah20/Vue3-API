@@ -5,5 +5,3 @@ import CardPokemon from "./components/CardPokemon.vue";
 <template>
   <CardPokemon />
 </template>
-
-<style scoped></style>
