@@ -18,7 +18,8 @@ const getPokemon = async (): Promise<void> => {
     // Map data untuk menyertakan gambar dengan ID dari URL
     pokemons.value = data.results.map(
       (pokemon: { name: string; url: string }) => {
-        const id = pokemon.url.split("/").slice(-2, -1)[0]; // Ambil ID dari URL
+        // Ambil ID dari URL
+        const id = pokemon.url.split("/").slice(-2, -1)[0];
         return {
           name: pokemon.name,
           image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`,
@@ -55,7 +56,7 @@ onMounted(() => {
         <img
           :src="pokemon.image"
           :alt="pokemon.name"
-          class="w-24 h-24 mx-auto mb-2"
+          class="w-48 h-48 object-content mx-auto mb-2"
         />
         <h2 class="text-lg font-semibold">{{ pokemon.name }}</h2>
       </div>
