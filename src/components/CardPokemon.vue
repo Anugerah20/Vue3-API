@@ -38,7 +38,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <section class="max-w-7xl mx-auto mb-10">
+  <section class="max-w-7xl mx-auto mb-10 px-5">
     <div class="flex flex-col justify-between items-center">
       <img
         class="flex w-48 h-48 object-contain"
@@ -47,11 +47,11 @@ onMounted(() => {
       />
     </div>
     <!-- Daftar Pokemon -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
       <div
         v-for="pokemon in pokemons"
         :key="pokemon.name"
-        class="border rounded-lg p-4 text-center shadow"
+        class="border rounded-lg p-4 text-center shadow gap-x-4"
       >
         <img
           :src="pokemon.image"
