@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { ref, onMounted, computed } from "vue";
 
 interface Pokemon {
   name: string;
@@ -9,6 +9,9 @@ interface Pokemon {
 
 // State untuk menyimpan daftar Pokemon
 const pokemons = ref<Pokemon[]>([]);
+
+// State untuk pencarian pokemon
+const searchQuery = ref<string>("");
 
 // Fungsi untuk fetch data Pokemon dengan URL gambar langsung
 const getPokemon = async (): Promise<void> => {
@@ -41,6 +44,13 @@ const getPokemon = async (): Promise<void> => {
 onMounted(() => {
   getPokemon();
 });
+
+// Search Pokemon by name
+const searchPokemon = computed(() => {
+  return pokemons.value.filter((pokemon) =>
+    pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
 </script>
 
 <template>
@@ -54,6 +64,7 @@ onMounted(() => {
     </div>
     <input
       type="text"
+      v-model="searchQuery"
       required
       class="input-search"
       placeholder="Search pokemon..."
@@ -61,7 +72,7 @@ onMounted(() => {
     <!-- Daftar Pokemon -->
     <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
       <div
-        v-for="pokemon in pokemons"
+        v-for="pokemon in searchPokemon"
         :key="pokemon.name"
         class="border rounded-lg p-4 text-center shadow gap-x-4"
       >
