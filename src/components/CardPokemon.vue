@@ -13,7 +13,7 @@ const pokemons = ref<Pokemon[]>([]);
 // Fungsi untuk fetch data Pokemon dengan URL gambar langsung
 const getPokemon = async (): Promise<void> => {
   try {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=10");
+    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
     const data = await response.json();
 
     // Fetch detail pokemon untuk mendapatkan URL Gambar
@@ -29,7 +29,7 @@ const getPokemon = async (): Promise<void> => {
       })
     );
 
-    console.log(pokemonDetails);
+    // console.log(pokemonDetails);
 
     pokemons.value = pokemonDetails;
   } catch (error) {
@@ -47,7 +47,7 @@ onMounted(() => {
   <section class="max-w-7xl mx-auto mb-10 px-5">
     <div class="flex flex-col justify-between items-center">
       <img
-        class="flex w-48 h-48 object-contain"
+        class="flex w-40 h-40 lg:w-52 lg:h-52 md:w-48 md:h-48 object-contain"
         src="../assets/pokeapi.png"
         alt="Pokemon"
       />
@@ -70,8 +70,14 @@ onMounted(() => {
           :alt="pokemon.name"
           class="w-48 h-48 object-content mx-auto mb-2"
         />
-        <h2 class="text-lg font-semibold">{{ pokemon.name }}</h2>
-        <router-link :to="`/pokemon/${pokemon.name}`"> Detail </router-link>
+        <h2 class="text-lg font-semibold mb-5">{{ pokemon.name }}</h2>
+        <router-link
+          :to="`/detail-pokemon/${pokemon.name}`"
+          class="btn-detail"
+          @click="console.log(`Navigation to /detail-pokemon/${pokemon.name}`)"
+        >
+          Detail
+        </router-link>
       </div>
     </div>
   </section>
