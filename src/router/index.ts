@@ -3,8 +3,17 @@ import CardPokemon from "../components/CardPokemon.vue";
 import DetailPokemon from "../components/DetailPokemon.vue";
 
 const routes = [
-  { path: "/", name: "Home", component: CardPokemon },
-  { path: "/pokemon/:name", name: "Detail", component: DetailPokemon },
+  {
+    path: "/",
+    name: "CardPokemon",
+    component: CardPokemon,
+  },
+  {
+    path: "/detail-pokemon/:name",
+    name: "DetailPokemon",
+    component: DetailPokemon,
+    props: true,
+  },
 ];
 
 const router = createRouter({
