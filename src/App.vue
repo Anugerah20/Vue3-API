@@ -1,7 +1,5 @@
-<script setup>
-import CardPokemon from "./components/CardPokemon.vue";
-</script>
+<script setup></script>
 
 <template>
-  <CardPokemon />
+  <router-view></router-view>
 </template>
