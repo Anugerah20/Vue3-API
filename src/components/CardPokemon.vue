@@ -13,11 +13,40 @@ const pokemons = ref<Pokemon[]>([]);
 // State untuk pencarian pokemon
 const searchQuery = ref<string>("");
 
+// State untuk pagination
+const currentPage = ref<number>(1); // Halaman aktif
+const limit = ref<number>(10); // Batasan jumlah data per halaman
+const totalPages = ref<number>(0); // Total semua halaman
+
+// Function next page pagination
+const handleNextPage = () => {
+  if (currentPage.value < totalPages.value) {
+    currentPage.value++;
+    getPokemon();
+  }
+};
+
+// Function previous page pagination
+const handlePrevPage = () => {
+  if (currentPage.value > 1) {
+    currentPage.value--;
+    getPokemon();
+  }
+};
+
 // Fungsi untuk fetch data Pokemon dengan URL gambar langsung
 const getPokemon = async (): Promise<void> => {
   try {
-    const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=20");
+    // Menghitung offset data pagination
+    const offset = (currentPage.value - 1) * limit.value;
+
+    const response = await fetch(
+      `https://pokeapi.co/api/v2/pokemon?limit=${limit.value}&offset=${offset}`
+    );
+
     const data = await response.json();
+
+    totalPages.value = Math.ceil(data.count / limit.value);
 
     // Fetch detail pokemon untuk mendapatkan URL Gambar
     const pokemonDetails = await Promise.all(
@@ -81,15 +110,42 @@ const searchPokemon = computed(() => {
           :alt="pokemon.name"
           class="w-48 h-48 object-content mx-auto mb-2"
         />
-        <h2 class="text-lg font-semibold mb-5">{{ pokemon.name }}</h2>
         <router-link
           :to="`/detail-pokemon/${pokemon.name}`"
-          class="btn-detail"
           @click="console.log(`Navigation to /detail-pokemon/${pokemon.name}`)"
         >
-          Detail
+          <h2 class="text-lg font-semibold mb-5">{{ pokemon.name }}</h2>
         </router-link>
       </div>
+    </div>
+    <div class="flex justify-end items-center mt-5 gap-5">
+      <button
+        @click="handlePrevPage"
+        :class="[
+          'btn-detail',
+          currentPage === 1
+            ? 'bg-gray-400 text-white'
+            : 'bg-slate-800 text-white',
+        ]"
+        :disabled="currentPage === 1"
+      >
+        Prev
+      </button>
+      <span class="text-black font-bold">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button
+        @click="handleNextPage"
+        :class="[
+          'btn-detail',
+          currentPage === totalPages
+            ? 'bg-gray-400 text-white'
+            : 'bg-slate-800 text-white',
+        ]"
+        :disabled="currentPage === totalPages"
+      >
+        Next
+      </button>
     </div>
   </section>
 </template>
