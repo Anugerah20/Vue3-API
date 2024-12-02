@@ -80,5 +80,7 @@ onMounted(() => {
       </div>
     </div>
   </section>
-  <p class="text-center" v-else>Loading...</p>
+  <section v-else class="flex justify-center items-center min-h-screen">
+    <p class="text-center animate-bounce">Loading...</p>
+  </section>
 </template>
