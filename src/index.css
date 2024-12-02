@@ -9,6 +9,6 @@
   }
 
   .btn-detail {
-    @apply bg-slate-900 text-white px-10 py-2 rounded-md;
+    @apply bg-gray-400 text-white px-10 py-2 rounded-md;
   }
 }
