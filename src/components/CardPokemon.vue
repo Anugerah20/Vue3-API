@@ -110,10 +110,7 @@ const searchPokemon = computed(() => {
           :alt="pokemon.name"
           class="w-48 h-48 object-content mx-auto mb-2"
         />
-        <router-link
-          :to="`/detail-pokemon/${pokemon.name}`"
-          @click="console.log(`Navigation to /detail-pokemon/${pokemon.name}`)"
-        >
+        <router-link :to="`/detail-pokemon/${pokemon.name}`">
           <h2 class="text-lg font-semibold mb-5">{{ pokemon.name }}</h2>
         </router-link>
       </div>
@@ -124,7 +121,7 @@ const searchPokemon = computed(() => {
         :class="[
           'btn-detail',
           currentPage === 1
-            ? 'bg-gray-400 text-white'
+            ? 'bg-gray-400 text-white cursor-no-drop'
             : 'bg-slate-800 text-white',
         ]"
         :disabled="currentPage === 1"
@@ -139,7 +136,7 @@ const searchPokemon = computed(() => {
         :class="[
           'btn-detail',
           currentPage === totalPages
-            ? 'bg-gray-400 text-white'
+            ? 'bg-gray-400 text-white cursor-no-drop'
             : 'bg-slate-800 text-white',
         ]"
         :disabled="currentPage === totalPages"
