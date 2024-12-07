@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
+import { Icon } from "@iconify/vue";
 
 interface Pokemon {
   name: string;
@@ -121,11 +122,12 @@ const searchPokemon = computed(() => {
         :class="[
           'btn-detail',
           currentPage === 1
-            ? 'bg-gray-400 text-white cursor-no-drop'
-            : 'bg-slate-800 text-white',
+            ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop'
+            : 'flex gap-x-1 items-center bg-slate-800 text-white',
         ]"
         :disabled="currentPage === 1"
       >
+        <Icon icon="flowbite:angle-left-outline" />
         Prev
       </button>
       <span class="text-black font-bold">
@@ -136,12 +138,13 @@ const searchPokemon = computed(() => {
         :class="[
           'btn-detail',
           currentPage === totalPages
-            ? 'bg-gray-400 text-white cursor-no-drop'
-            : 'bg-slate-800 text-white',
+            ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop'
+            : 'flex gap-x-1 items-center bg-slate-800 text-white',
         ]"
         :disabled="currentPage === totalPages"
       >
         Next
+        <Icon icon="flowbite:angle-right-outline" />
       </button>
     </div>
   </section>
