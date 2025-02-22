@@ -81,10 +81,15 @@ const searchPokemon = computed(() => {
     pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
+
+// Pokemon Not Found
+const pokemonNotFound = computed(() => {
+  return searchQuery.value.trim() !== "" && searchPokemon.value.length === 0;
+});
 </script>
 
 <template>
-  <section class="max-w-7xl mx-auto mb-10 px-5">
+  <section class="max-w-7xl min-h-screen mx-auto px-5">
     <div class="flex flex-col justify-between items-center">
       <img
         class="flex w-40 h-40 lg:w-52 lg:h-52 md:w-48 md:h-48 object-contain"
@@ -99,6 +104,9 @@ const searchPokemon = computed(() => {
       class="input-search"
       placeholder="Search pokemon..."
     />
+    <div v-if="pokemonNotFound" class="text-center mt-5">
+      <p class="text-red-500">Pokemon not found.</p>
+    </div>
     <!-- Daftar Pokemon -->
     <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
       <div
@@ -116,36 +124,38 @@ const searchPokemon = computed(() => {
         </router-link>
       </div>
     </div>
-    <div class="flex justify-end items-center mt-5 gap-5">
-      <button
-        @click="handlePrevPage"
-        :class="[
-          'btn-detail',
-          currentPage === 1
-            ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop'
-            : 'flex gap-x-1 items-center bg-slate-800 text-white',
-        ]"
-        :disabled="currentPage === 1"
-      >
-        <Icon icon="flowbite:angle-left-outline" />
-        Prev
-      </button>
-      <span class="text-black font-bold">
-        Page {{ currentPage }} of {{ totalPages }}
-      </span>
-      <button
-        @click="handleNextPage"
-        :class="[
-          'btn-detail',
-          currentPage === totalPages
-            ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop'
-            : 'flex gap-x-1 items-center bg-slate-800 text-white',
-        ]"
-        :disabled="currentPage === totalPages"
-      >
-        Next
-        <Icon icon="flowbite:angle-right-outline" />
-      </button>
-    </div>
   </section>
+  <div
+    class="flex justify-center lg:justify-end md:justify-end sm:justify-center items-center m-5 gap-2"
+  >
+    <button
+      @click="handlePrevPage"
+      :class="[
+        'btn-detail',
+        currentPage === 1
+          ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop p-3'
+          : 'flex gap-x-1 items-center bg-slate-800 text-white p-3',
+      ]"
+      :disabled="currentPage === 1"
+    >
+      <Icon icon="flowbite:angle-left-outline" />
+      Prev
+    </button>
+    <span class="text-black font-bold">
+      Page {{ currentPage }} of {{ totalPages }}
+    </span>
+    <button
+      @click="handleNextPage"
+      :class="[
+        'btn-detail',
+        currentPage === totalPages
+          ? 'flex gap-x-1 items-center bg-gray-400 text-white cursor-no-drop p-3'
+          : 'flex gap-x-1 items-center bg-slate-800 text-white p-3',
+      ]"
+      :disabled="currentPage === totalPages"
+    >
+      Next
+      <Icon icon="flowbite:angle-right-outline" />
+    </button>
+  </div>
 </template>
