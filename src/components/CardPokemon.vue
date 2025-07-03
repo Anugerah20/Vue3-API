@@ -1,25 +1,16 @@
 <script setup lang="ts">
 import { ref, onMounted, computed } from "vue";
 import { Icon } from "@iconify/vue";
+import { Pokemon } from "../types/pokemon";
 
-interface Pokemon {
-  name: string;
-  url: string;
-  image: string;
-}
-
-// State untuk menyimpan daftar Pokemon
 const pokemons = ref<Pokemon[]>([]);
 
-// State untuk pencarian pokemon
 const searchQuery = ref<string>("");
 
-// State untuk pagination
-const currentPage = ref<number>(1); // Halaman aktif
-const limit = ref<number>(10); // Batasan jumlah data per halaman
-const totalPages = ref<number>(0); // Total semua halaman
+const currentPage = ref<number>(1);
+const limit = ref<number>(10);
+const totalPages = ref<number>(0);
 
-// Function next page pagination
 const handleNextPage = () => {
   if (currentPage.value < totalPages.value) {
     currentPage.value++;
@@ -27,7 +18,6 @@ const handleNextPage = () => {
   }
 };
 
-// Function previous page pagination
 const handlePrevPage = () => {
   if (currentPage.value > 1) {
     currentPage.value--;
@@ -35,10 +25,8 @@ const handlePrevPage = () => {
   }
 };
 
-// Fungsi untuk fetch data Pokemon dengan URL gambar langsung
 const getPokemon = async (): Promise<void> => {
   try {
-    // Menghitung offset data pagination
     const offset = (currentPage.value - 1) * limit.value;
 
     const response = await fetch(
@@ -49,7 +37,6 @@ const getPokemon = async (): Promise<void> => {
 
     totalPages.value = Math.ceil(data.count / limit.value);
 
-    // Fetch detail pokemon untuk mendapatkan URL Gambar
     const pokemonDetails = await Promise.all(
       data.results.map(async (pokemon: { name: string; url: string }) => {
         const responseDetail = await fetch(pokemon.url);
@@ -62,27 +49,22 @@ const getPokemon = async (): Promise<void> => {
       })
     );
 
-    // console.log(pokemonDetails);
-
     pokemons.value = pokemonDetails;
   } catch (error) {
     console.error("Error fetching Pokemon data:", error);
   }
 };
 
-// Fetch data saat komponen dimuat
 onMounted(() => {
   getPokemon();
 });
 
-// Search Pokemon by name
 const searchPokemon = computed(() => {
   return pokemons.value.filter((pokemon) =>
     pokemon.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
 });
 
-// Pokemon Not Found
 const pokemonNotFound = computed(() => {
   return searchQuery.value.trim() !== "" && searchPokemon.value.length === 0;
 });
@@ -104,10 +86,17 @@ const pokemonNotFound = computed(() => {
       class="input-search"
       placeholder="Search pokemon..."
     />
-    <div v-if="pokemonNotFound" class="text-center mt-5">
-      <p class="text-red-500">Pokemon not found.</p>
+    <div
+      v-if="pokemonNotFound"
+      class="min-h-screen flex flex-col justify-center items-center"
+    >
+      <img
+        src="../assets/not-found.svg"
+        alt="Not Found"
+        class="w-60 h-60 object-contain mx-auto"
+      />
+      <p class="text-gray-500 text-2xl font-bold">Pokemon not found.</p>
     </div>
-    <!-- Daftar Pokemon -->
     <div class="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-4">
       <div
         v-for="pokemon in searchPokemon"
@@ -139,7 +128,7 @@ const pokemonNotFound = computed(() => {
       :disabled="currentPage === 1"
     >
       <Icon icon="flowbite:angle-left-outline" />
-      Prev
+      Previous
     </button>
     <span class="text-black font-bold">
       Page {{ currentPage }} of {{ totalPages }}
