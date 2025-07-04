@@ -39,12 +39,12 @@ onMounted(() => {
           />
           <h1 class="text-2xl font-bold mb-5">{{ pokemonDetail.name }}</h1>
         </div>
-        <div class="flex flex-col justify-between">
+        <div class="flex flex-wrap flex-col justify-between">
           <div class="flex justify-between flex-wrap">
             <p class="font-bold flex flex-col">Types :</p>
             <p class="font-bold flex flex-col">Abilities :</p>
           </div>
-          <div class="flex justify-between my-2">
+          <div class="flex flex-wrap justify-between my-2">
             <ul class="flex flex-col flex-wrap">
               <li v-for="type in pokemonDetail.types" :key="type.type.name">
                 {{ type.type.name }}
@@ -59,15 +59,11 @@ onMounted(() => {
               </li>
             </ul>
           </div>
-          <div class="flex justify-between items-center gap-4 my-2">
-            <p class="font-bold flex-wrap flex-col">Height :</p>
-            <span class="flex flex-col flex-wrap">{{
-              pokemonDetail.height
-            }}</span>
+          <div class="flex flex-wrap justify-between gap-3 text-center">
+            <p class="font-bold">Height :</p>
+            <span>{{ pokemonDetail.height }}</span>
             <p class="font-bold">Weight :</p>
-            <span class="flex flex-col flex-wrap">{{
-              pokemonDetail.weight
-            }}</span>
+            <span>{{ pokemonDetail.weight }}</span>
           </div>
         </div>
       </section>
