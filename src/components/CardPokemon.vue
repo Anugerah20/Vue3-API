@@ -29,8 +29,11 @@ const getPokemon = async (): Promise<void> => {
   try {
     const offset = (currentPage.value - 1) * limit.value;
 
+    // @ts-ignore
+    const apiURL = import.meta.env.VITE_API_URL;
+
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon?limit=${limit.value}&offset=${offset}`
+      `${apiURL}/pokemon?limit=${limit.value}&offset=${offset}`
     );
 
     const data = await response.json();
