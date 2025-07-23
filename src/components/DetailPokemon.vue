@@ -3,20 +3,35 @@ import { ref, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { Icon } from "@iconify/vue";
 import { DetailPokemon } from "../types/pokemon";
+import { Swiper, SwiperSlide } from "swiper/vue";
+import { Navigation } from "swiper/modules";
+import "swiper/css/navigation";
+import "swiper/css";
 
 const route = useRoute();
 const router = useRouter();
-const detailPokemonName = ref<string>(route.params.name as string);
 
+const detailPokemonName = ref<string>(route.params.name as string);
 const pokemonDetail = ref<DetailPokemon | null>(null);
+const images = ref<string[]>([]);
 
 const fetchPokemonDetail = async (): Promise<void> => {
+  // @ts-ignore
+  const apiURL = import.meta.env.VITE_API_URL;
   try {
     const response = await fetch(
-      `https://pokeapi.co/api/v2/pokemon/${detailPokemonName.value}`
+      `${apiURL}/pokemon/${detailPokemonName.value}`
     );
     const data = await response.json();
     pokemonDetail.value = data;
+
+    images.value = [
+      data.sprites.front_default,
+      data.sprites.back_default,
+      data.sprites.front_shiny,
+      data.sprites.back_shiny,
+    ].filter(Boolean);
+
     console.log("Detail pokemon", data);
   } catch (error) {
     console.error("Error fetching Pokémon details:", error);
@@ -30,14 +45,29 @@ onMounted(() => {
 <template>
   <div class="flex flex-col justify-center items-center mx-5">
     <template v-if="pokemonDetail">
-      <section class="max-w-8xl p-20 h-max mt-10 border-2 rounded-md">
-        <div class="text-center">
-          <img
-            :src="pokemonDetail.sprites.front_default"
-            :alt="pokemonDetail.name"
-            class="w-40 h-40 mx-auto"
-          />
-          <h1 class="text-2xl font-bold mb-5">{{ pokemonDetail.name }}</h1>
+      <section class="max-w-8xl p-10 h-max mt-10 border-2 rounded-md">
+        <div class="w-60 mx-auto mb-6">
+          <Swiper
+            :spaceBetween="20"
+            :slidesPerView="1"
+            :modules="[Navigation]"
+            navigation
+            loop
+            class="rounded-md"
+          >
+            <SwiperSlide v-for="(img, index) in images" :key="index">
+              <img
+                :src="img"
+                :alt="`Image ${index}`"
+                class="w-full h-40 object-contain"
+              />
+            </SwiperSlide>
+          </Swiper>
+        </div>
+        <div class="text-center mb-5">
+          <h1 class="text-2xl font-bold capitalize">
+            {{ pokemonDetail.name }}
+          </h1>
         </div>
         <div class="flex flex-wrap flex-col justify-between">
           <div class="flex justify-between flex-wrap">
@@ -59,11 +89,15 @@ onMounted(() => {
               </li>
             </ul>
           </div>
-          <div class="flex flex-wrap justify-between gap-3 text-center">
-            <p class="font-bold">Height :</p>
-            <span>{{ pokemonDetail.height }}</span>
-            <p class="font-bold">Weight :</p>
-            <span>{{ pokemonDetail.weight }}</span>
+          <div class="flex justify-between text-center">
+            <div>
+              <p class="font-bold">Height :</p>
+              <p class="text-md">{{ pokemonDetail.height }}</p>
+            </div>
+            <div>
+              <p class="font-bold">Weight :</p>
+              <p class="text-md">{{ pokemonDetail.weight }}</p>
+            </div>
           </div>
         </div>
       </section>
@@ -71,9 +105,10 @@ onMounted(() => {
         <a
           href="/"
           class="p-4 mb-2 rounded bg-gray-300 text-black focus:font-bold"
-          @click="router.back()"
-          >Back Home</a
+          @click.prevent="router.back()"
         >
+          Back Home
+        </a>
       </div>
     </template>
     <template v-else>
