@@ -5,8 +5,12 @@ import { Icon } from "@iconify/vue";
 import { DetailPokemon } from "../types/pokemon";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Navigation } from "swiper/modules";
+import { useDarkModeStore } from "../stores/darkModeStore";
 import "swiper/css/navigation";
 import "swiper/css";
+
+// Dark mode store
+const darkModeStore = useDarkModeStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -39,6 +43,8 @@ const fetchPokemonDetail = async (): Promise<void> => {
 };
 
 onMounted(() => {
+  // Initialize dark mode
+  darkModeStore.initialize();
   fetchPokemonDetail();
 });
 </script>
@@ -53,7 +59,7 @@ onMounted(() => {
             :modules="[Navigation]"
             navigation
             loop
-            class="rounded-md"
+            class="rounded-md bg-gray-100 dark:bg-gray-600"
           >
             <SwiperSlide v-for="(img, index) in images" :key="index">
               <img
